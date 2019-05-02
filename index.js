@@ -62,5 +62,7 @@ app.post("/voice", (request, response) => {
     response.send(twiml.toString());
 });
 
-console.log("listening on port 8000");
-server.listen(8000); //listen on port 80
+const port = process.env.PORT || 8000;
+
+console.log("listening on port " + port);
+server.listen(port); //listen on port 80
