@@ -17,28 +17,28 @@ const digits = {
     "8": 0
 };
 
-setInterval(() => {
-    if (Object.keys(digits).every(d => digits[d] === 0)) {
-        return;
-    }
+// setInterval(() => {
+//     if (Object.keys(digits).every(d => digits[d] === 0)) {
+//         return;
+//     }
 
-    const value = Object.keys(digits).reduce((max, d) => {
-        if (digits[d] > max.count) {
-            return {
-                key: d,
-                count: digits[d]
-            };
-        }
-        return max;
-    }, {
-        key: 0,
-        count: 0
-    });
+//     const value = Object.keys(digits).reduce((max, d) => {
+//         if (digits[d] > max.count) {
+//             return {
+//                 key: d,
+//                 count: digits[d]
+//             };
+//         }
+//         return max;
+//     }, {
+//         key: 0,
+//         count: 0
+//     });
 
-    Object.keys(digits).forEach(d => digits[d] = 0);
+//     Object.keys(digits).forEach(d => digits[d] = 0);
 
-    io.emit("move", value.key);
-}, 500);
+//     io.emit("move", value.key);
+// }, 500);
 
 app.post("/voice", (request, response) => {
     // Use the Twilio Node.js SDK to build an XML response
@@ -53,7 +53,8 @@ app.post("/voice", (request, response) => {
 
     // If the user entered digits, process their request
     if (request.body.Digits && digits[request.body.Digits] !== undefined) {
-        digits[request.body.Digits]++;
+        io.emit("move", request.body.Digits);
+        // digits[request.body.Digits]++;
     }
     gather();
 
