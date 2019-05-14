@@ -38,6 +38,8 @@ setInterval(() => {
     Object.keys(digits).forEach(d => digits[d] = 0);
 
     if (value.count > 0) {
+        console.log("emitted ", value);
+        console.log("digits obj ", digits);
         io.emit("move", value.key);
     }
 }, 200);
@@ -56,6 +58,7 @@ app.post("/voice", (request, response) => {
     // If the user entered digits, process their request
     if (request.body.Digits && digits[request.body.Digits] !== undefined) {
         // io.emit("move", request.body.Digits);
+        console.log("digits entered " + request.body.Digits);
         digits[request.body.Digits]++;
     }
     gather();
