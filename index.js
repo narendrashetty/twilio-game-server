@@ -42,7 +42,7 @@ setInterval(() => {
         console.log("digits obj ", digits);
         io.emit("move", value.key);
     }
-}, 200);
+}, 1000);
 
 app.post("/voice", (request, response) => {
     // Use the Twilio Node.js SDK to build an XML response
