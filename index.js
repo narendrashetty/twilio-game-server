@@ -51,6 +51,7 @@ app.post("/sms", (request, response) => {
 
     if (request.body.Body && digits[request.body.Body] !== undefined) {
         digits[request.body.Body]++;
+        twiml.message('You move is registered. Keep going. You are doing great');
     } else {
         twiml.message('Unknown! Send 2, 4, 6 or 8');
     }
