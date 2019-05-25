@@ -2,6 +2,7 @@ const http = require("http");
 const express = require("express");
 const VoiceResponse = require("twilio").twiml.VoiceResponse;
 const urlencoded = require("body-parser").urlencoded;
+const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 app = module.exports.app = express();
 
@@ -44,28 +45,17 @@ setInterval(() => {
     }
 }, 1000);
 
-app.post("/voice", (request, response) => {
+app.post("/sms", (request, response) => {
     // Use the Twilio Node.js SDK to build an XML response
-    const twiml = new VoiceResponse();
+    const twiml = new MessagingResponse();
 
-    /** helper function to set up a <Gather> */
-    function gather() {
-        const gatherNode = twiml.gather({numDigits: 1});
-        // If the user doesn't enter input, loop
-        twiml.redirect("/voice");
+    if (request.body.Body && digits[request.body.Body] !== undefined) {
+        digits[request.body.Body]++;
+    } else {
+        twiml.message('Unknown! Send 2, 4, 6 or 8');
     }
-
-    // If the user entered digits, process their request
-    if (request.body.Digits && digits[request.body.Digits] !== undefined) {
-        // io.emit("move", request.body.Digits);
-        console.log("digits entered " + request.body.Digits);
-        digits[request.body.Digits]++;
-    }
-    gather();
-
-    // Render the response as XML in reply to the webhook request
-    response.type("text/xml");
-    response.send(twiml.toString());
+    response.writeHead(200, { 'Content-Type': 'text/xml' });
+    response.end(twiml.toString());
 });
 
 const port = process.env.PORT || 8000;
